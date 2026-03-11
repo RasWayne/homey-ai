@@ -1,4 +1,4 @@
-# EstateAI Architecture and Consistency Review
+# Homey AI Architecture and Consistency Review
 
 ## Scope Reviewed
 - `BRD.md`
@@ -21,7 +21,7 @@ The architecture is directionally strong (modular NestJS backend, Next.js fronte
 
 ### 1.1 Product scope mismatch: marketplace vs workflow-only
 - `AGENTS.md` includes `listing marketplace` as a core system component (`AGENTS.md:17`).
-- `IMPLEMENTATION_PLAN.md` states “EstateAI is a transaction workflow system, not a listing marketplace” (`IMPLEMENTATION_PLAN.md:23`).
+- `IMPLEMENTATION_PLAN.md` states “Homey AI is a transaction workflow system, not a listing marketplace” (`IMPLEMENTATION_PLAN.md:23`).
 
 Impact:
 - Conflicting roadmap and service/API expectations.

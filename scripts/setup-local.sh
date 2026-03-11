@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "-------------------------------------"
-echo "EstateAI Local Development Setup"
+echo "Homey AI Local Development Setup"
 echo "-------------------------------------"
 
 echo ""
@@ -70,13 +70,13 @@ docker compose exec backend npm run prisma:seed
 echo ""
 echo "Creating demo data..."
 
-export DATABASE_URL=${DATABASE_URL:-postgres://postgres:postgres@localhost:5432/estateai}
+export DATABASE_URL=${DATABASE_URL:-postgres://postgres:postgres@localhost:5432/homeyai}
 export PATH="$(pwd)/backend/node_modules/.bin:$PATH"
 npx tsx backend/scripts/seed-demo.ts
 
 echo ""
 echo "-------------------------------------"
-echo "EstateAI running locally"
+echo "Homey AI running locally"
 echo ""
 echo "Frontend:"
 echo "http://localhost:3000"

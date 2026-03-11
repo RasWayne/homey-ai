@@ -139,7 +139,7 @@ export function DashboardShell({ transactionId, userId }: DashboardShellProps): 
     <section className="relative grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
       <div className="space-y-6">
         <div className="rounded-3xl border border-blue-200/60 bg-gradient-to-r from-blue-600 to-blue-500 p-6 text-white shadow-lg">
-          <p className="text-xs uppercase tracking-[0.2em] text-blue-100">EstateAI - AI Transaction Copilot</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-blue-100">Homey AI - AI Transaction Copilot</p>
           <h2 className="mt-2 text-3xl font-semibold">Understand your deal in 10 seconds</h2>
           <p className="mt-2 max-w-2xl text-sm text-blue-100">
             See your next action, deal risk, and deadlines instantly. Ask the copilot for simple guidance.
@@ -170,7 +170,7 @@ export function DashboardShell({ transactionId, userId }: DashboardShellProps): 
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-blue-600" /> EstateAI Copilot
+                <Sparkles className="h-5 w-5 text-blue-600" /> Homey AI Copilot
               </CardTitle>
               <CardDescription>Recommended next action in your transaction workflow.</CardDescription>
             </CardHeader>
@@ -181,7 +181,7 @@ export function DashboardShell({ transactionId, userId }: DashboardShellProps): 
               <p className="text-sm text-slate-600">
                 {nextStep
                   ? `Focus on ${nextStep.milestone} before ${formatDate(nextStep.dueDate)}.`
-                  : 'Great progress. You can ask EstateAI for strategic preparation tips.'}
+                  : 'Great progress. You can ask Homey AI for strategic preparation tips.'}
               </p>
               <div className="rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
                 {nextStep?.reason ?? 'This recommendation updates automatically as milestones progress.'}
@@ -317,11 +317,11 @@ export function DashboardShell({ transactionId, userId }: DashboardShellProps): 
 
       <div className="xl:sticky xl:top-6 xl:h-[calc(100vh-3rem)]">
         {sessionId ? (
-          <AIChatPanel sessionId={sessionId} initialMessages={messages} title="Ask EstateAI" />
+          <AIChatPanel sessionId={sessionId} initialMessages={messages} title="Ask Homey AI" />
         ) : (
           <Card className="h-full">
             <CardHeader>
-              <CardTitle>Ask EstateAI</CardTitle>
+              <CardTitle>Ask Homey AI</CardTitle>
               <CardDescription>Preparing your AI session...</CardDescription>
             </CardHeader>
           </Card>

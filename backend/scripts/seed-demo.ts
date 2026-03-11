@@ -17,7 +17,7 @@ function upsertEnvValue(content: string, key: string, value: string): string {
 }
 
 async function main(): Promise<void> {
-  const demoEmail = 'demo@estateai.dev';
+  const demoEmail = 'demo@homeyai.dev';
 
   const user = await prisma.user.upsert({
     where: { email: demoEmail },

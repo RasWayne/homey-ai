@@ -1,12 +1,12 @@
-# EstateAI Project Context
+# Homey AI Project Context
 
 ## Overview
-EstateAI is an AI copilot for residential real estate transactions. The goal is to guide buyers and sellers through the home buying or selling process without needing a traditional realtor for workflow guidance.
+Homey AI is an AI copilot for residential real estate transactions. The goal is to guide buyers and sellers through the home buying or selling process without needing a traditional realtor for workflow guidance.
 
 The system explains documents, tracks transaction milestones, monitors deadlines, and answers questions about the transaction using AI.
 
 ## Product Vision
-EstateAI aims to function like "TurboTax for real estate transactions". Instead of hiring a realtor primarily for process guidance, users can rely on an AI copilot to understand and complete the transaction.
+Homey AI aims to function like "TurboTax for real estate transactions". Instead of hiring a realtor primarily for process guidance, users can rely on an AI copilot to understand and complete the transaction.
 
 Key capabilities:
 - explain documents
@@ -33,7 +33,7 @@ Main UI areas:
 - Notifications
 
 Dashboard features:
-- EstateAI Copilot card (next action)
+- Homey AI Copilot card (next action)
 - Deal Health Score indicator
 - Upcoming Deadlines
 - Transaction Timeline
@@ -124,7 +124,7 @@ Libraries used:
 - class-variance-authority
 
 ## Current Product Direction
-EstateAI should eventually:
+Homey AI should eventually:
 
 1. Help users understand and manage real estate transactions without relying on realtors.
 2. Generate or manage standardized state real estate forms.
@@ -133,7 +133,7 @@ EstateAI should eventually:
 5. Provide AI-powered risk analysis for contracts and transaction steps.
 
 ## Next Major Design Question
-How EstateAI should obtain, generate, and manage real estate transaction documents that are traditionally handled by realtors using standardized state forms.
+How Homey AI should obtain, generate, and manage real estate transaction documents that are traditionally handled by realtors using standardized state forms.
 
 The system likely needs a document engine that:
 - selects required documents based on state and transaction type

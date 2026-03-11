@@ -4,8 +4,8 @@ import { Sidebar } from '@/components/layout/sidebar';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'EstateAI',
-  description: 'EstateAI AI copilot dashboard',
+  title: 'Homey AI',
+  description: 'Homey AI AI copilot dashboard',
 };
 
 export default function RootLayout({

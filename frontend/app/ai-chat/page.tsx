@@ -14,7 +14,7 @@ export default function AiChatPage(): JSX.Element {
             <Brain className="h-5 w-5 text-blue-600" /> AI chat awaiting demo context
           </CardTitle>
           <CardDescription>
-            Chat quality improves when EstateAI has a seeded demo transaction context.
+            Chat quality improves when Homey AI has a seeded demo transaction context.
           </CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-slate-700">

@@ -1,6 +1,6 @@
 # PROJECT PROGRESS
 
-EstateAI is currently in an advanced MVP/prototype stage with a working full-stack implementation: NestJS + Prisma backend APIs, Next.js frontend dashboard experience, AI chat persistence with OpenAI fallback behavior, workflow/milestone progression, document APIs, notifications APIs, background queue scaffolding, Docker local environment, and demo-data bootstrapping for instant local demos.
+Homey AI is currently in an advanced MVP/prototype stage with a working full-stack implementation: NestJS + Prisma backend APIs, Next.js frontend dashboard experience, AI chat persistence with OpenAI fallback behavior, workflow/milestone progression, document APIs, notifications APIs, background queue scaffolding, Docker local environment, and demo-data bootstrapping for instant local demos.
 
 ## CURRENT PRODUCT CAPABILITIES
 
@@ -212,7 +212,7 @@ Demo helper script:
 
 What it does:
 
-- Upserts demo user (`Demo Buyer`, `demo@estateai.dev`).
+- Upserts demo user (`Demo Buyer`, `demo@homeyai.dev`).
 - Creates/updates demo property (`123 Palm Ave`, Miami, FL 33101, listing price 550000).
 - Finds or creates a BUY transaction for that user/property.
 - Writes/updates `frontend/.env.local` with:
@@ -258,7 +258,7 @@ When run (`bash scripts/setup-local.sh`), it:
 Simplified repository tree:
 
 ```text
-EstateAI/
+Homey AI/
 ├── backend/
 │   ├── prisma/
 │   │   ├── schema.prisma
@@ -325,7 +325,7 @@ Most recent major additions reflected in code:
 - AI copilot-oriented dashboard shell with high-visibility summary UI.
 - Modern reusable UI component primitives (Card, Badge, Button, Progress, Tabs).
 - Demo seed system (`backend/scripts/seed-demo.ts`) with `.env.local` auto-write.
-- Right-side “Ask EstateAI” chat panel with chat-style bubbles.
+- Right-side “Ask Homey AI” chat panel with chat-style bubbles.
 - Sidebar navigation refresh with lucide icons and notifications route.
 - Timeline and deal health visual widgets connected to backend endpoints.
 - Local Docker setup automation updates that include demo data bootstrapping.

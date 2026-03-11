@@ -17,7 +17,7 @@ interface AIChatPanelProps {
 export function AIChatPanel({
   sessionId,
   initialMessages,
-  title = 'Ask EstateAI',
+  title = 'Ask Homey AI',
 }: AIChatPanelProps): JSX.Element {
   const [messages, setMessages] = useState<AiMessageResponse[]>(initialMessages);
   const [messageText, setMessageText] = useState('');
@@ -82,7 +82,7 @@ export function AIChatPanel({
             value={messageText}
             onChange={(event) => setMessageText(event.target.value)}
             className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none ring-blue-500 transition focus:ring-2"
-            placeholder="Ask EstateAI anything about your deal"
+            placeholder="Ask Homey AI anything about your deal"
           />
           <Button type="submit" disabled={isSending}>
             <SendHorizonal className="h-4 w-4" />

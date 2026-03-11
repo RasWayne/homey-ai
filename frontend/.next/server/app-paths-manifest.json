@@ -1,7 +1,9 @@
 {
-  "/transactions/page": "app/transactions/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/transactions/page": "app/transactions/page.js",
   "/documents/page": "app/documents/page.js",
-  "/notifications/page": "app/notifications/page.js",
-  "/ai-chat/page": "app/ai-chat/page.js"
+  "/ai-chat/page": "app/ai-chat/page.js",
+  "/page": "app/page.js",
+  "/notifications/page": "app/notifications/page.js"
 }

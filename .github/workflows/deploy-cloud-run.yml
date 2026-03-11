@@ -1,0 +1,101 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: homey-ai
+  REGION: us-central1
+  AR_REPOSITORY: homey-containers
+  BACKEND_SERVICE: homey-backend
+  FRONTEND_SERVICE: homey-frontend
+  FRONTEND_DOMAIN: homey-ai.co
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up gcloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Configure Docker auth for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push backend image
+        id: backend_image
+        run: |
+          BACKEND_IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPOSITORY }}/backend:${{ github.sha }}"
+          docker build -t "$BACKEND_IMAGE" ./backend
+          docker push "$BACKEND_IMAGE"
+          echo "image=$BACKEND_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy backend to Cloud Run
+        id: deploy_backend
+        run: |
+          BACKEND_URL=$(gcloud run deploy "${{ env.BACKEND_SERVICE }}" \
+            --image="${{ steps.backend_image.outputs.image }}" \
+            --region="${{ env.REGION }}" \
+            --project="${{ env.PROJECT_ID }}" \
+            --platform=managed \
+            --allow-unauthenticated \
+            --format='value(status.url)')
+
+          echo "backend_url=$BACKEND_URL" >> "$GITHUB_OUTPUT"
+          echo "Backend URL: $BACKEND_URL"
+
+      - name: Build and push frontend image
+        id: frontend_image
+        run: |
+          FRONTEND_IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPOSITORY }}/frontend:${{ github.sha }}"
+          docker build -t "$FRONTEND_IMAGE" ./frontend
+          docker push "$FRONTEND_IMAGE"
+          echo "image=$FRONTEND_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy frontend to Cloud Run
+        id: deploy_frontend
+        run: |
+          FRONTEND_URL=$(gcloud run deploy "${{ env.FRONTEND_SERVICE }}" \
+            --image="${{ steps.frontend_image.outputs.image }}" \
+            --region="${{ env.REGION }}" \
+            --project="${{ env.PROJECT_ID }}" \
+            --platform=managed \
+            --allow-unauthenticated \
+            --set-env-vars="NEXT_PUBLIC_API_URL=${{ steps.deploy_backend.outputs.backend_url }}/api/v1" \
+            --format='value(status.url)')
+
+          echo "frontend_url=$FRONTEND_URL" >> "$GITHUB_OUTPUT"
+          echo "Frontend URL: $FRONTEND_URL"
+
+      - name: Map frontend custom domain
+        run: |
+          if gcloud beta run domain-mappings describe \
+            --domain="${{ env.FRONTEND_DOMAIN }}" \
+            --region="${{ env.REGION }}" \
+            --project="${{ env.PROJECT_ID }}" >/dev/null 2>&1; then
+            echo "Domain mapping already exists for ${{ env.FRONTEND_DOMAIN }}"
+          else
+            gcloud beta run domain-mappings create \
+              --service="${{ env.FRONTEND_SERVICE }}" \
+              --domain="${{ env.FRONTEND_DOMAIN }}" \
+              --region="${{ env.REGION }}" \
+              --project="${{ env.PROJECT_ID }}"
+          fi

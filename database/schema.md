@@ -1,8 +1,8 @@
-# EstateAI Database Schema
+# Homey AI Database Schema
 
 Database: PostgreSQL
 
-This schema supports the EstateAI workflow-based real estate transaction platform.
+This schema supports the Homey AI workflow-based real estate transaction platform.
 
 The system centers around:
 

@@ -7,7 +7,7 @@ https://www.docker.com/products/docker-desktop/
 2 Clone repository
 
 git clone <repo>
-cd estateai
+cd homeyai
 
 3 Run setup
 

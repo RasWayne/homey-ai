@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "EstateAI Backend",
-    "description": "Postman collection for EstateAI backend endpoints.",
+    "name": "Homey AI Backend",
+    "description": "Postman collection for Homey AI backend endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [

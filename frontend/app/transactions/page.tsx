@@ -13,7 +13,7 @@ export default function TransactionsPage(): JSX.Element {
           <CardTitle className="flex items-center gap-2">
             <WalletCards className="h-5 w-5 text-blue-600" /> No active demo transaction
           </CardTitle>
-          <CardDescription>EstateAI needs one seeded transaction to show timeline and task guidance.</CardDescription>
+          <CardDescription>Homey AI needs one seeded transaction to show timeline and task guidance.</CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-slate-700">
           Run `bash scripts/setup-local.sh` to seed demo transaction data.

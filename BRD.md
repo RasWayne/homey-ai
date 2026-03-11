@@ -1,4 +1,4 @@
-# EstateAI
+# Homey AI
 ## Business Requirements Document (BRD)
 
 Version: v2  
@@ -8,7 +8,7 @@ Concept: **TurboTax for buying and selling homes**
 
 # 1. Executive Summary
 
-EstateAI is a guided transaction platform that helps consumers manage the process of buying or selling a home through structured workflows and AI guidance.
+Homey AI is a guided transaction platform that helps consumers manage the process of buying or selling a home through structured workflows and AI guidance.
 
 The platform organizes the real estate process into milestones and tasks similar to how tax software guides users through filing taxes.
 
@@ -55,7 +55,7 @@ Users remain responsible for decisions while the software provides structure and
 
 # 4. Product Scope
 
-EstateAI is a **workflow guidance platform**, not a brokerage.
+Homey AI is a **workflow guidance platform**, not a brokerage.
 
 The system does not:
 

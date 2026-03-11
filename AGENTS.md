@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This document defines rules and guidance for AI coding agents working on the EstateAI repository.
+This document defines rules and guidance for AI coding agents working on the Homey AI repository.
 
 Agents must read this file before generating or modifying code.
 
@@ -8,7 +8,7 @@ Agents must read this file before generating or modifying code.
 
 # Project Overview
 
-EstateAI is an AI-guided home transaction platform.
+Homey AI is an AI-guided home transaction platform.
 
 The platform helps users buy or sell homes with step-by-step workflow guidance.
 

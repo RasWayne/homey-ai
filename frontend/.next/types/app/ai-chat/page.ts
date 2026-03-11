@@ -1,4 +1,4 @@
-// File: /app/app/ai-chat/page.tsx
+// File: /Users/juliengong/Desktop/EstateAI/frontend/app/ai-chat/page.tsx
 import * as entry from '../../../../app/ai-chat/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

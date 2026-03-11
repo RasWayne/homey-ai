@@ -25,7 +25,7 @@ export function Sidebar(): JSX.Element {
   return (
     <aside className="w-full border-b border-slate-200 bg-white/80 p-4 backdrop-blur md:h-screen md:w-72 md:border-b-0 md:border-r md:p-6">
       <div className="mb-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-blue-600">EstateAI</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-blue-600">Homey AI</p>
         <h1 className="mt-1 text-xl font-semibold text-slate-900">AI Copilot</h1>
         <p className="mt-2 text-xs text-slate-500">TurboTax for home transactions.</p>
       </div>

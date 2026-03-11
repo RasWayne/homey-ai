@@ -1,4 +1,4 @@
-# EstateAI Technical Requirements Document
+# Homey AI Technical Requirements Document
 
 Version: v2
 
@@ -6,7 +6,7 @@ Version: v2
 
 ## 1. System Overview
 
-EstateAI is a workflow platform that guides users through buying or selling a home.
+Homey AI is a workflow platform that guides users through buying or selling a home.
 
 The system organizes transactions into:
 
@@ -62,7 +62,7 @@ Backend → Cloud Run
 
 ## 3. Core System Components
 
-EstateAI includes the following system components:
+Homey AI includes the following system components:
 
 - Web frontend
 - Backend API

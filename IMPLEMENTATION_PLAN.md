@@ -1,7 +1,7 @@
-# EstateAI Implementation Plan
+# Homey AI Implementation Plan
 
 ## 1. Objective
-Define a production-ready system architecture for EstateAI aligned with:
+Define a production-ready system architecture for Homey AI aligned with:
 
 - BRD.md (business requirements)
 - TRD.md (technical requirements)
@@ -20,7 +20,7 @@ This document defines architecture, service boundaries, data flow, and phased im
 - Security-first architecture
 - AI guidance with compliance guardrails
 
-EstateAI is a **transaction workflow system**, not a listing marketplace.
+Homey AI is a **transaction workflow system**, not a listing marketplace.
 
 ---
 

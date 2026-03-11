@@ -15,7 +15,7 @@ export default function DashboardPage(): JSX.Element {
               <Sparkles className="h-5 w-5 text-blue-600" /> Demo mode is not initialized yet
             </CardTitle>
             <CardDescription>
-              Run local setup once and EstateAI will auto-generate a demo buyer, property, and transaction.
+              Run local setup once and Homey AI will auto-generate a demo buyer, property, and transaction.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-slate-700">
