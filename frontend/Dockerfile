@@ -8,6 +8,10 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+RUN npm run build
 
-CMD ["npm","run","dev"]
+ENV NODE_ENV=production
+
+EXPOSE 8080
+
+CMD ["npm","run","start"]
