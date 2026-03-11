@@ -1,0 +1,6 @@
+-- Notification system schema migration placeholder.
+-- Expected changes:
+-- 1) Add users.email_enabled, users.sms_enabled, users.push_enabled
+-- 2) Create notifications table with user_id, type, message, is_read, created_at
+-- 3) Add notifications(user_id, created_at) index
+-- Generate exact SQL with Prisma migrate.

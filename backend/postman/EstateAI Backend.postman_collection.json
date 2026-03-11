@@ -1,0 +1,573 @@
+{
+  "info": {
+    "name": "EstateAI Backend",
+    "description": "Postman collection for EstateAI backend endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Buyer\",\n  \"email\": \"jane.buyer+{{$timestamp}}@example.com\",\n  \"phone\": \"+15551234567\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = {};",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (json.id) { pm.environment.set('userId', json.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update Me",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Buyer Updated\",\n  \"phone\": \"+15557654321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Properties",
+      "item": [
+        {
+          "name": "Create Property",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addressLine1\": \"123 Main St\",\n  \"city\": \"Miami\",\n  \"state\": \"FL\",\n  \"zipCode\": \"33101\",\n  \"listingUrl\": \"https://www.zillow.com/homedetails/example\",\n  \"listingPrice\": 550000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/properties",
+              "host": ["{{baseUrl}}"],
+              "path": ["properties"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = {};",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (json.id) { pm.environment.set('propertyId', json.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Import Property From Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listingUrl\": \"https://www.zillow.com/homedetails/example\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/properties/import",
+              "host": ["{{baseUrl}}"],
+              "path": ["properties", "import"]
+            }
+          }
+        },
+        {
+          "name": "Get Property",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/properties/{{propertyId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["properties", "{{propertyId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"propertyId\": \"{{propertyId}}\",\n  \"transactionType\": \"buy\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = {};",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (json && json.id) { pm.environment.set('transactionId', json.id); }",
+                  "if (json && json.currentMilestoneId) { pm.environment.set('milestoneId', json.currentMilestoneId); }",
+                  "if (json && Array.isArray(json.milestones) && json.milestones.length > 0) {",
+                  "  const firstMilestone = json.milestones[0];",
+                  "  if (firstMilestone.id) pm.environment.set('milestoneId', firstMilestone.id);",
+                  "  if (Array.isArray(firstMilestone.tasks) && firstMilestone.tasks.length > 0 && firstMilestone.tasks[0].id) {",
+                  "    pm.environment.set('taskId', firstMilestone.tasks[0].id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Import Transaction Milestone",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"propertyId\": \"{{propertyId}}\",\n  \"transactionType\": \"sell\",\n  \"currentMilestoneId\": \"{{milestoneId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions/import-milestone",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "import-milestone"]
+            }
+          }
+        },
+        {
+          "name": "Get Transaction",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/transactions/{{transactionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "{{transactionId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Current Milestone",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentMilestoneId\": \"{{milestoneId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions/{{transactionId}}/current-milestone",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "{{transactionId}}", "current-milestone"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workflow & Tasks",
+      "item": [
+        {
+          "name": "List Milestones",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/transactions/{{transactionId}}/milestones",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "{{transactionId}}", "milestones"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = [];",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (Array.isArray(json) && json.length > 0 && json[0].id) { pm.environment.set('milestoneId', json[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Tasks By Milestone",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/milestones/{{milestoneId}}/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["milestones", "{{milestoneId}}", "tasks"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = [];",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (Array.isArray(json) && json.length > 0 && json[0].id) { pm.environment.set('taskId', json[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Task Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/{{taskId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["tasks", "{{taskId}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "Get Transaction Progress",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/transactions/{{transactionId}}/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "{{transactionId}}", "progress"]
+            }
+          }
+        },
+        {
+          "name": "Get Transaction Workflow",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/transactions/{{transactionId}}/workflow",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "{{transactionId}}", "workflow"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Create Upload URL",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionId\": \"{{transactionId}}\",\n  \"fileName\": \"purchase-agreement.pdf\",\n  \"contentType\": \"application/pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/documents/upload-url",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "upload-url"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = {};",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (json.fileUrl) { pm.environment.set('fileUrl', json.fileUrl); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionId\": \"{{transactionId}}\",\n  \"uploadedBy\": \"{{userId}}\",\n  \"documentType\": \"purchase_agreement\",\n  \"fileUrl\": \"{{fileUrl}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = {};",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (json.id) { pm.environment.set('documentId', json.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Transaction Documents",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/transactions/{{transactionId}}/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "{{transactionId}}", "documents"]
+            }
+          }
+        },
+        {
+          "name": "Get Document Access URL",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/documents/{{documentId}}/access-url",
+              "host": ["{{baseUrl}}"],
+              "path": ["documents", "{{documentId}}", "access-url"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI",
+      "item": [
+        {
+          "name": "Create AI Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"transactionId\": \"{{transactionId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ai/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["ai", "sessions"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = {};",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (json.sessionId) { pm.environment.set('sessionId', json.sessionId); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create AI Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messageText\": \"What should I do next in my transaction?\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ai/sessions/{{sessionId}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["ai", "sessions", "{{sessionId}}", "messages"]
+            }
+          }
+        },
+        {
+          "name": "List AI Messages",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/ai/sessions/{{sessionId}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["ai", "sessions", "{{sessionId}}", "messages"]
+            }
+          }
+        },
+        {
+          "name": "Explain Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"Summarize this for a first-time home buyer.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ai/documents/{{documentId}}/explain",
+              "host": ["{{baseUrl}}"],
+              "path": ["ai", "documents", "{{documentId}}", "explain"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/notifications?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"],
+              "query": [
+                { "key": "userId", "value": "{{userId}}" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let json = [];",
+                  "try { json = pm.response.json(); } catch (e) {}",
+                  "if (Array.isArray(json) && json.length > 0 && json[0].id) { pm.environment.set('notificationId', json[0].id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/notifications/{{notificationId}}/read?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "{{notificationId}}", "read"],
+              "query": [
+                { "key": "userId", "value": "{{userId}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Notification Preferences",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailEnabled\": true,\n  \"smsEnabled\": false,\n  \"pushEnabled\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/me/notification-preferences?userId={{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "notification-preferences"],
+              "query": [
+                { "key": "userId", "value": "{{userId}}" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Collection-level pre-request script placeholder"
+        ]
+      }
+    }
+  ]
+}

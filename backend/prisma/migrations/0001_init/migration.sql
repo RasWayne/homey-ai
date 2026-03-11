@@ -1,0 +1,2 @@
+-- Initial migration placeholder.
+-- Generate actual SQL with: prisma migrate dev --name init

@@ -1,0 +1,3 @@
+-- No-op migration.
+-- Task.due_date already exists in the current Prisma schema as:
+-- dueDate DateTime? @map("due_date")

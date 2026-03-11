@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionType {
+  buy
+  sell
+}
+
+enum MilestoneStatus {
+  pending
+  active
+  completed
+}
+
+enum TaskStatus {
+  pending
+  completed
+  blocked
+}
+
+enum AgentActionStatus {
+  suggested
+  approved
+  executed
+  cancelled
+}
+
+enum AiMessageRole {
+  user
+  assistant
+}
+
+enum WorkflowStage {
+  select_property
+  submit_offer
+  offer_accepted
+  inspection_period
+  mortgage_process
+  appraisal
+  closing_preparation
+  closing
+  prepare_home_for_sale
+  list_property
+  receive_offers
+  accept_offer
+  title_and_escrow
+}
+
+model User {
+  id                    String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  email                 String         @unique
+  phone                 String?
+  emailEnabled          Boolean        @default(true) @map("email_enabled")
+  smsEnabled            Boolean        @default(false) @map("sms_enabled")
+  pushEnabled           Boolean        @default(true) @map("push_enabled")
+  createdAt             DateTime       @default(now()) @map("created_at")
+  transactions          Transaction[]
+  uploadedDocuments     Document[]     @relation("UploadedDocuments")
+  aiChatSessions        AiChatSession[]
+  approvedAgentActions  AgentAction[]  @relation("ApprovedByUser")
+  notifications         Notification[]
+
+  @@map("users")
+}
+
+model Property {
+  id                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  addressLine1      String         @map("address_line1")
+  city              String
+  state             String
+  zipCode           String         @map("zip_code")
+  listingUrl        String?        @map("listing_url")
+  listingPrice      Decimal?       @db.Decimal @map("listing_price")
+  listingAgentName  String?        @map("listing_agent_name")
+  listingAgentPhone String?        @map("listing_agent_phone")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  transactions      Transaction[]
+
+  @@map("properties")
+}
+
+model Transaction {
+  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String        @map("user_id") @db.Uuid
+  propertyId         String        @map("property_id") @db.Uuid
+  transactionType    TransactionType @map("transaction_type")
+  currentMilestoneId String?       @map("current_milestone_id") @db.Uuid
+  createdAt          DateTime      @default(now()) @map("created_at")
+
+  user              User          @relation(fields: [userId], references: [id])
+  property          Property      @relation(fields: [propertyId], references: [id])
+  milestones        Milestone[]   @relation("TransactionMilestones")
+  currentMilestone  Milestone?    @relation("CurrentTransactionMilestone", fields: [currentMilestoneId], references: [id])
+  documents         Document[]
+  aiChatSessions    AiChatSession[]
+  agentActions      AgentAction[]
+
+  @@index([userId])
+  @@index([propertyId])
+  @@index([currentMilestoneId])
+  @@map("transactions")
+}
+
+model WorkflowTemplate {
+  id               String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String
+  transactionType  TransactionType        @map("transaction_type")
+  createdAt        DateTime               @default(now()) @map("created_at")
+  templateTasks    WorkflowTemplateTask[]
+
+  @@map("workflow_templates")
+}
+
+model WorkflowTemplateTask {
+  id         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  templateId String           @map("template_id") @db.Uuid
+  stageName  WorkflowStage    @map("stage_name")
+  taskName   String           @map("task_name")
+  taskOrder  Int              @map("task_order")
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  template   WorkflowTemplate @relation(fields: [templateId], references: [id])
+
+  @@map("workflow_template_tasks")
+}
+
+model Milestone {
+  id                          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transactionId               String         @map("transaction_id") @db.Uuid
+  stageName                   WorkflowStage  @map("stage_name")
+  stageOrder                  Int            @map("stage_order")
+  status                      MilestoneStatus
+  startedAt                   DateTime?      @map("started_at")
+  completedAt                 DateTime?      @map("completed_at")
+  createdAt                   DateTime       @default(now()) @map("created_at")
+
+  transaction                 Transaction    @relation("TransactionMilestones", fields: [transactionId], references: [id])
+  currentForTransactions      Transaction[]  @relation("CurrentTransactionMilestone")
+  tasks                       Task[]
+
+  @@index([transactionId])
+  @@index([transactionId, stageOrder])
+  @@map("milestones")
+}
+
+model Task {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  milestoneId   String       @map("milestone_id") @db.Uuid
+  taskName      String       @map("task_name")
+  taskDescription String?    @map("task_description")
+  taskOrder     Int          @map("task_order")
+  isRequired    Boolean      @default(true) @map("is_required")
+  status        TaskStatus
+  blockedReason String?      @map("blocked_reason")
+  dueDate       DateTime?    @map("due_date")
+  completedAt   DateTime?    @map("completed_at")
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  milestone     Milestone    @relation(fields: [milestoneId], references: [id])
+  agentActions  AgentAction[]
+
+  @@index([milestoneId])
+  @@index([milestoneId, taskOrder])
+  @@index([milestoneId, dueDate])
+  @@index([status])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+model Document {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transactionId String       @map("transaction_id") @db.Uuid
+  uploadedBy    String       @map("uploaded_by") @db.Uuid
+  documentType  String       @map("document_type")
+  fileUrl       String       @map("file_url")
+  uploadedAt    DateTime     @default(now()) @map("uploaded_at")
+  createdAt     DateTime     @default(now()) @map("created_at")
+
+  transaction   Transaction  @relation(fields: [transactionId], references: [id])
+  uploader      User         @relation("UploadedDocuments", fields: [uploadedBy], references: [id])
+
+  @@index([transactionId])
+  @@map("documents")
+}
+
+model AiChatSession {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String        @map("user_id") @db.Uuid
+  transactionId String?       @map("transaction_id") @db.Uuid
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  user          User          @relation(fields: [userId], references: [id])
+  transaction   Transaction?  @relation(fields: [transactionId], references: [id])
+  messages      AiChatMessage[]
+
+  @@index([userId, createdAt])
+  @@map("ai_chat_sessions")
+}
+
+model AiChatMessage {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId     String        @map("session_id") @db.Uuid
+  role          AiMessageRole
+  messageText   String        @map("message_text")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  session       AiChatSession @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId])
+  @@map("ai_chat_messages")
+}
+
+model AgentAction {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  transactionId   String            @map("transaction_id") @db.Uuid
+  taskId          String?           @map("task_id") @db.Uuid
+  actionType      String            @map("action_type")
+  actionPayload   Json              @map("action_payload")
+  status          AgentActionStatus
+  approvedBy      String?           @map("approved_by") @db.Uuid
+  approvedAt      DateTime?         @map("approved_at")
+  executedAt      DateTime?         @map("executed_at")
+  executionResult Json?             @map("execution_result")
+  errorMessage    String?           @map("error_message")
+  createdAt       DateTime          @default(now()) @map("created_at")
+
+  transaction     Transaction       @relation(fields: [transactionId], references: [id])
+  task            Task?             @relation(fields: [taskId], references: [id])
+  approver        User?             @relation("ApprovedByUser", fields: [approvedBy], references: [id])
+
+  @@index([transactionId, status, createdAt])
+  @@index([taskId])
+  @@map("agent_actions")
+}
+
+model Notification {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  type      String
+  message   String
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
