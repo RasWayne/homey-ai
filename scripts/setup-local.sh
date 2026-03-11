@@ -72,7 +72,7 @@ echo "Creating demo data..."
 
 export DATABASE_URL=${DATABASE_URL:-postgres://postgres:postgres@localhost:5432/estateai}
 export PATH="$(pwd)/backend/node_modules/.bin:$PATH"
-npx ts-node backend/scripts/seed-demo.ts
+npx tsx backend/scripts/seed-demo.ts
 
 echo ""
 echo "-------------------------------------"

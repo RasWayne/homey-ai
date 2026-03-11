@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start": "node dist/main.js",
     "build": "nest build",
     "lint": "eslint \"src/**/*.ts\"",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "ts-node prisma/seeds/workflowTemplates.ts",
+    "prisma:seed": "tsx prisma/seeds/workflowTemplates.ts",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio"
@@ -32,7 +31,7 @@
     "@nestjs/testing": "^10.0.0",
     "@types/node": "^20.14.0",
     "prisma": "^5.20.0",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
     "typescript": "^5.4.5"
   }
 }
