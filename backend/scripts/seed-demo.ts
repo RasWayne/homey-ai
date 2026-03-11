@@ -80,7 +80,7 @@ async function main(): Promise<void> {
     : '';
 
   let nextEnv = existingEnv;
-  nextEnv = upsertEnvValue(nextEnv, 'NEXT_PUBLIC_API_URL', 'http://localhost:4000/api/v1');
+  nextEnv = upsertEnvValue(nextEnv, 'NEXT_PUBLIC_API_URL', 'http://localhost:8080/api/v1');
   nextEnv = upsertEnvValue(nextEnv, 'NEXT_PUBLIC_DEFAULT_USER_ID', user.id);
   nextEnv = upsertEnvValue(nextEnv, 'NEXT_PUBLIC_DEFAULT_TRANSACTION_ID', transaction.id);
 
